@@ -1,1 +1,1 @@
-# wesbos-node-course
+# Wes Bos ”Learn Node“ course
