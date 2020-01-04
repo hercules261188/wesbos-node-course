@@ -5,7 +5,8 @@ const router = express.Router();
 router.get("/", (req, res) => {
   res.render("hello", {
     name: "Alex",
-    dog: "Ceasar"
+    dog: "Ceasar",
+    title: "Page title"
   });
 });
 
