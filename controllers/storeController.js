@@ -19,3 +19,22 @@ exports.getStores = async (req, res) => {
   const stores = await Store.find();
   res.render("stores", { title: "Stores", stores });
 };
+
+exports.editStore = async (req, res) => {
+  const store = await Store.findOne({ _id: req.params.id });
+  // TODO: authorize
+  res.render("editStore", { title: `Edit ${store.name}`, store });
+};
+
+exports.updateStore = async (req, res) => {
+  const query = { _id: req.params.id };
+  const data = req.body;
+  const options = {
+    new: true, // return new store instead of old one
+    runValidators: true // by default mongo doesnt run validation on update
+  };
+
+  const store = await Store.findOneAndUpdate(query, data, options).exec();
+  req.flash("success", `Successfully updated ${store.name}`);
+  res.redirect(`/stores/${store._id}/edit`);
+};
