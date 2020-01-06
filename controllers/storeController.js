@@ -27,6 +27,8 @@ exports.editStore = async (req, res) => {
 };
 
 exports.updateStore = async (req, res) => {
+  req.body.location.type = "Point";
+
   const query = { _id: req.params.id };
   const data = req.body;
   const options = {
