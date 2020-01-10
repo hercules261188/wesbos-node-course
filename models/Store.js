@@ -42,6 +42,9 @@ const storeSchema = new mongoose.Schema({
   }
 });
 
+// define indices
+storeSchema.index({ name: "text", description: "text" });
+
 // autogenerate slug before saving
 // next(); is like middleware
 storeSchema.pre("save", async function(next) {
