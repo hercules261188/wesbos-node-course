@@ -42,7 +42,7 @@ exports.forgot = async (req, res) => {
 
   await sendEmail({
     user,
-    resetUrl,
+    resetUrl: resetURL,
     subject: "Password reset",
     filename: "password-reset"
   });
