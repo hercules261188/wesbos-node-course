@@ -23,13 +23,16 @@ function typeAhead(search) {
     }
 
     results.style.display = "block";
-    results.innerHTML = "";
 
     axios
       .get(`/api/search?q=${this.value}`)
       .then(res => {
-        if (!res.data.length) return;
-        results.innerHTML = searchResultsHtml(res.data);
+        if (res.data.length) {
+          results.innerHTML = searchResultsHtml(res.data);
+          return;
+        }
+
+        results.innerHTML = `<div class='search__results'>No results for ${this.value} found.</div>`;
       })
       .catch(err => {
         console.error(err);
