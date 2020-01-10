@@ -1,30 +1,36 @@
 const express = require("express");
 const router = express.Router();
-const controllers = require("../controllers/storeController");
+const storeController = require("../controllers/storeController");
+const userController = require("../controllers/userController");
 const { catchErrors } = require("../handlers/errorHandlers");
 
-router.get("/", catchErrors(controllers.getStores));
-router.get("/stores", catchErrors(controllers.getStores));
-router.get("/add", controllers.addStore);
+router.get("/", catchErrors(storeController.getStores));
+router.get("/stores", catchErrors(storeController.getStores));
+router.get("/add", storeController.addStore);
 
 router.post(
   "/add",
-  controllers.upload,
-  catchErrors(controllers.resize),
-  catchErrors(controllers.createStore)
+  storeController.upload,
+  catchErrors(storeController.resize),
+  catchErrors(storeController.createStore)
 );
 
 router.post(
   "/add/:id",
-  controllers.upload,
-  catchErrors(controllers.resize),
-  catchErrors(controllers.updateStore)
+  storeController.upload,
+  catchErrors(storeController.resize),
+  catchErrors(storeController.updateStore)
 );
 
-router.get("/stores/:id/edit", catchErrors(controllers.editStore));
-router.get("/store/:slug", catchErrors(controllers.getStoreBySlug));
+router.get("/stores/:id/edit", catchErrors(storeController.editStore));
+router.get("/store/:slug", catchErrors(storeController.getStoreBySlug));
 
-router.get("/tags", catchErrors(controllers.getStoresByTag));
-router.get("/tags/:tag", catchErrors(controllers.getStoresByTag));
+router.get("/tags", catchErrors(storeController.getStoresByTag));
+router.get("/tags/:tag", catchErrors(storeController.getStoresByTag));
+
+router.get("/login", userController.loginForm);
+router.get("/register", userController.registerForm);
+
+router.post("/register", userController.validateRegister);
 
 module.exports = router;
