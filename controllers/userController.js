@@ -72,5 +72,6 @@ exports.updateAccount = async (req, res) => {
   const options = { new: true, runValidators: true, context: "query" };
 
   const user = await User.findOneAndUpdate(query, data, options);
+  req.flash("success", "Account updated");
   res.redirect("/account");
 };
