@@ -34,7 +34,12 @@ const storeSchema = new mongoose.Schema({
       required: "Supply an address."
     }
   },
-  photo: String
+  photo: String,
+  author: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: "Supply an author"
+  }
 });
 
 // autogenerate slug before saving

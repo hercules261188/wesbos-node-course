@@ -38,7 +38,9 @@ exports.resize = async (req, res, next) => {
 };
 
 exports.createStore = async (req, res) => {
+  req.body.author = req.user._id;
   const store = await new Store(req.body).save();
+
   req.flash("success", `Successfully created ${store.name}`);
   res.redirect(`/store/${store.slug}`);
 };
@@ -50,7 +52,6 @@ exports.getStores = async (req, res) => {
 
 exports.editStore = async (req, res) => {
   const store = await Store.findOne({ _id: req.params.id });
-  // TODO: authorize
   res.render("editStore", { title: `Edit ${store.name}`, store });
 };
 
