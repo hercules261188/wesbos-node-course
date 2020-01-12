@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Store = mongoose.model("Store");
+const User = mongoose.model("User");
 
 const jimp = require("jimp");
 const uuid = require("uuid");
@@ -130,4 +131,23 @@ exports.mapStores = async (req, res) => {
 
 exports.mapPage = (req, res) => {
   res.render("map", { title: "Map" });
+};
+
+exports.heartStore = async (req, res) => {
+  // toString — lifehack:
+  const hearts = req.user.hearts.map(obj => obj.toString());
+
+  // not "$push" to avoid duplications:
+  const operator = hearts.includes(req.params.id) ? "$pull" : "$addToSet";
+
+  const query = req.user._id;
+  const options = { new: true };
+  const data = {
+    [operator]: {
+      hearts: req.params.id
+    }
+  };
+
+  const user = await User.findByIdAndUpdate(query, data, options);
+  res.json(user);
 };
