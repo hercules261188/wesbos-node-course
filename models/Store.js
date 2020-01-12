@@ -2,45 +2,51 @@ const slug = require("slugs");
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-const storeSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    trim: true,
-    required: `Please enter the store name.`
-  },
-  slug: String,
-  description: {
-    type: String,
-    trim: true
-  },
-  tags: [String],
-  created: {
-    type: Date,
-    default: Date.now
-  },
-  location: {
-    type: {
+const storeSchema = new mongoose.Schema(
+  {
+    name: {
       type: String,
-      default: "Point"
+      trim: true,
+      required: `Please enter the store name.`
     },
-    coordinates: [
-      {
-        type: Number,
-        required: "Supply the coordinates."
-      }
-    ],
-    address: {
+    slug: String,
+    description: {
       type: String,
-      required: "Supply an address."
+      trim: true
+    },
+    tags: [String],
+    created: {
+      type: Date,
+      default: Date.now
+    },
+    location: {
+      type: {
+        type: String,
+        default: "Point"
+      },
+      coordinates: [
+        {
+          type: Number,
+          required: "Supply the coordinates."
+        }
+      ],
+      address: {
+        type: String,
+        required: "Supply an address."
+      }
+    },
+    photo: String,
+    author: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: "Supply an author"
     }
   },
-  photo: String,
-  author: {
-    type: mongoose.Schema.ObjectId,
-    ref: "User",
-    required: "Supply an author"
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   }
-});
+);
 
 // define indices
 storeSchema.index({ name: "text", description: "text" });
@@ -69,5 +75,11 @@ storeSchema.statics.getTagsList = function() {
     { $sort: { count: -1 } }
   ]);
 };
+
+storeSchema.virtual("reviews", {
+  ref: "Review",
+  localField: "_id", // which field on the store should be equal to
+  foreignField: "store" // which field on the review model
+});
 
 module.exports = mongoose.model("Store", storeSchema);
