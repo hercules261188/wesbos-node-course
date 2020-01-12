@@ -82,4 +82,29 @@ storeSchema.virtual("reviews", {
   foreignField: "store" // which field on the review model
 });
 
+storeSchema.statics.getTopStores = function() {
+  return this.aggregate([
+    {
+      $lookup: {
+        from: "reviews",
+        localField: "_id",
+        foreignField: "store",
+        as: "reviews"
+      }
+    },
+    { $match: { "reviews.1": { $exists: true } } },
+    {
+      // better use $addField instead of $project not to duplicate manually:
+      $project: {
+        photo: "$$ROOT.photo",
+        name: "$$ROOT.name",
+        slug: "$$ROOT.slug",
+        averageRating: { $avg: "$reviews.rating" }
+      }
+    },
+    { $sort: { averageRating: -1 } },
+    { $limit: 10 }
+  ]);
+};
+
 module.exports = mongoose.model("Store", storeSchema);
