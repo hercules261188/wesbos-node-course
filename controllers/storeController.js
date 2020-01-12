@@ -134,7 +134,7 @@ exports.mapPage = (req, res) => {
 };
 
 exports.heartStore = async (req, res) => {
-  // toString — lifehack:
+  // toString — lifehack to get id:
   const hearts = req.user.hearts.map(obj => obj.toString());
 
   // not "$push" to avoid duplications:
