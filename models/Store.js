@@ -44,6 +44,7 @@ const storeSchema = new mongoose.Schema({
 
 // define indices
 storeSchema.index({ name: "text", description: "text" });
+storeSchema.index({ location: "2dsphere" });
 
 // autogenerate slug before saving
 // next(); is like middleware
