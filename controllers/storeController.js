@@ -151,3 +151,11 @@ exports.heartStore = async (req, res) => {
   const user = await User.findByIdAndUpdate(query, data, options);
   res.json(user);
 };
+
+exports.getHearts = async (req, res) => {
+  const stores = await Store.find({
+    _id: { $in: req.user.hearts }
+  });
+
+  res.render("stores", { title: "Liked Stores", stores });
+};
